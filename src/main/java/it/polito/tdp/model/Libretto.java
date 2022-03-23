@@ -1,67 +1,65 @@
 package it.polito.tdp.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import it.polito.tdp.db.LibrettoDAO;
 
 public class Libretto {
 
-	private List<Voto> voti;
-
+	private List<Voto> voti ;
+	
 	public Libretto() {
-		this.voti = new ArrayList<Voto>();
-	}
-
-	//Delega
-	public void add(Voto v) {
-		this.voti.add(v);
-	}
-
-	@Override
-	public String toString() {
-		return this.voti.toString();
+		this.voti = new ArrayList<Voto>() ;
 	}
 	
-	public Libretto filtraPunti(int punti) {
-		Libretto l = new Libretto();
+	public boolean add(Voto v) {
+		LibrettoDAO dao = new LibrettoDAO();
 		
-		for(Voto i : this.voti) {
-			if(i.getPunti()==punti) {
-				l.add(i);
-			}
-		}
-		
-		return l;
-	}
-	/**
-	 * @param nome Nome dell'esame
-	 * @return punteggio numerico oppure eccezione se il corso non esiste
-	 */
-	public Integer ricercaCorso(String nome) {
-		for(Voto i : this.voti) {
-			if(i.getNomeCorso().compareTo(nome)==0) {
-				return i.getPunti();
-			}
-		}
-		//return -1;
-		return null;
-		//throw new IllegalArgumentException("Corso non trovato");
-	}
-	
-	public boolean isDuplicato(Voto v) {
-		for(Voto i : this.voti) {
-			if(i.equals(v))
-				return true;
-		}
-		return false;
-	}
-	
-	public boolean isConflitto(Voto v) {
-		Integer punti = this.ricercaCorso(v.getNomeCorso());
-		
-		if(punti!=null && punti!= v.getPunti()) {
-			return false; 
-		} else {
+		if(dao.creaVoto(v)) {
 			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
+	public List<Voto> getVoti() {
+		LibrettoDAO dao = new LibrettoDAO();
+		return dao.readAllVoto();
+	}
+	
+	
+	public Libretto votiMigliorati() {
+		Libretto nuovo = new Libretto() ;
+		for(Voto v: this.voti) {
+			int punti = v.getPunti() ;
+			if(punti>=24)
+				punti +=2 ;
+			else 
+				punti++ ;
+			if (punti>30)
+				punti=30 ;
+
+			// NOOOO va a modificare l'oggetto nel libretto originale
+			//			v.setPunti(punti);
+			//			nuovo.add(v) ;
+			
+			nuovo.add(new Voto(v.getNome(), punti)) ;
+		}
+		return nuovo ;
+	}
+	
+	
+	// FUNZIONERÀ COSÌ??? Proviamo... e capiamo perché
+	public void cancellaVotiMinori(int punti) {
+		for(Voto v: this.voti) {
+			if(v.getPunti()<punti)
+				this.voti.remove(v) ;
 		}
 	}
 	
+	public String toString() {
+		return this.voti.toString() ;
+	}
 }

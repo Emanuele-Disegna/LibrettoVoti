@@ -1,5 +1,6 @@
 package it.polito.tdp.librettovoti;
 
+import it.polito.tdp.model.Libretto;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,12 +12,27 @@ public class EntryPoint extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Scene.fxml"));
+        Parent root = loader.load();
+        //Non chiamo un metodo statico ma chiamo un 
+        //nuovo oggetto su cui chiamo il metodo load
+        //tutto questo per non chiamare un metodo statico
+        //e soprattutto avere un oggetto loader che ha
+        //un metodo getController che ha a disposizione
+        //un metodo setModel
+        
+        FXMLController controller = loader.getController();
+        
+        
         
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/styles/Styles.css");
         
-        stage.setTitle("JavaFX and Maven");
+        Libretto model = new Libretto();
+        controller.setModel(model);
+        
+        stage.setTitle("Applicazione Libretto Voti");
         stage.setScene(scene);
         stage.show();
     }

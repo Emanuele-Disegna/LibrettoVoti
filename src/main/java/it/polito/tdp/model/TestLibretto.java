@@ -15,11 +15,11 @@ public class TestLibretto {
 		lib.add(new Voto("Analisi 2", 21));
 		lib.add(new Voto("Ricerca Op", 26));
 		lib.add(new Voto("JECW", 24));
-		
+		/*
 		//System.out.println()
 		Libretto lib25 = lib.filtraPunti(25);
 		System.out.println(lib25);
-		
+		*/
 		
 		
 	}
