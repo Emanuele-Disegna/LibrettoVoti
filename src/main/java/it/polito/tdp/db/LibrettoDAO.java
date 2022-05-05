@@ -55,6 +55,16 @@ public class LibrettoDAO {
 				String nome = res.getString("nome");
 				int punti = res.getInt("punti");
 				result.add(new Voto(nome, punti));
+				/*
+				 * GESTIONE DATE:
+				 * 
+				 * Per richiedere al db una data è necessario
+				 * passare per la classe Date (non ci piace)
+				 * per arrivare ad avere un oggetto di tipo
+				 * LocalDate con il metodo Date.toLocalDate
+				 * 
+				 * es: LocalDate data = res.getDate("data").toLocalDate()
+				 */
 			}
 			
 			//Bisogna ricordarsi di chiudere le connessioni 
